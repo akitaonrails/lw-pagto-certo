@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.locaweb.com.br" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.locaweb.com.br" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.locaweb.com.br">
+      <s:element name="IniciaTransacao">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="chaveVendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="urlRetorno" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IniciaTransacaoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IniciaTransacaoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PagaTransacao">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="chaveVendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="urlRetorno" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xmlCartao" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PagaTransacaoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PagaTransacaoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultaTransacao">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="chaveVendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="idTransacao" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultaTransacaoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ConsultaTransacaoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="IniciaTransacaoSoapIn">
+    <wsdl:part name="parameters" element="tns:IniciaTransacao" />
+  </wsdl:message>
+  <wsdl:message name="IniciaTransacaoSoapOut">
+    <wsdl:part name="parameters" element="tns:IniciaTransacaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="PagaTransacaoSoapIn">
+    <wsdl:part name="parameters" element="tns:PagaTransacao" />
+  </wsdl:message>
+  <wsdl:message name="PagaTransacaoSoapOut">
+    <wsdl:part name="parameters" element="tns:PagaTransacaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ConsultaTransacaoSoapIn">
+    <wsdl:part name="parameters" element="tns:ConsultaTransacao" />
+  </wsdl:message>
+  <wsdl:message name="ConsultaTransacaoSoapOut">
+    <wsdl:part name="parameters" element="tns:ConsultaTransacaoResponse" />
+  </wsdl:message>
+  <wsdl:portType name="VendedorSoap">
+    <wsdl:operation name="IniciaTransacao">
+      <wsdl:input message="tns:IniciaTransacaoSoapIn" />
+      <wsdl:output message="tns:IniciaTransacaoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PagaTransacao">
+      <wsdl:input message="tns:PagaTransacaoSoapIn" />
+      <wsdl:output message="tns:PagaTransacaoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaTransacao">
+      <wsdl:input message="tns:ConsultaTransacaoSoapIn" />
+      <wsdl:output message="tns:ConsultaTransacaoSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="VendedorSoap" type="tns:VendedorSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IniciaTransacao">
+      <soap:operation soapAction="http://www.locaweb.com.br/IniciaTransacao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PagaTransacao">
+      <soap:operation soapAction="http://www.locaweb.com.br/PagaTransacao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaTransacao">
+      <soap:operation soapAction="http://www.locaweb.com.br/ConsultaTransacao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="VendedorSoap12" type="tns:VendedorSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IniciaTransacao">
+      <soap12:operation soapAction="http://www.locaweb.com.br/IniciaTransacao" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PagaTransacao">
+      <soap12:operation soapAction="http://www.locaweb.com.br/PagaTransacao" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaTransacao">
+      <soap12:operation soapAction="http://www.locaweb.com.br/ConsultaTransacao" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Vendedor">
+    <wsdl:port name="VendedorSoap" binding="tns:VendedorSoap">
+      <soap:address location="https://www.pagamentocerto.com.br/vendedor/vendedor.asmx" />
+    </wsdl:port>
+    <wsdl:port name="VendedorSoap12" binding="tns:VendedorSoap12">
+      <soap12:address location="https://www.pagamentocerto.com.br/vendedor/vendedor.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

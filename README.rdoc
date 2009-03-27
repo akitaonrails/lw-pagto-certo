@@ -1,0 +1,163 @@
+= lw-pagto-certo
+
+* Gem para integração com o serviço Pagamento Certo da Locaweb
+
+== DESCRIPTION:
+
+Encapsula as chamadas SOAP ao servidor do Pagamento Certo, criando os
+envelopes corretos de dados.
+
+== REQUIREMENTS:
+
+ActiveSupport
+SOAP4R
+Builder
+
+== INSTALL:
+
+  gem install akitaonrails-lw-pagto-certo
+
+== USANDO O PAGAMENTO CERTO DA LOCAWEB
+
+=== Passo 1: Cadastro do Vendedor
+
+Antes de mais nada, você precisa se cadastrar como um vendedor, para ganhar uma
+chave única, secreta, que o identifica como vendedor. Para isso vá ao site:
+
+  http://www.locaweb.com.br/produtos/pagamento-certo
+
+Depois de se cadastrar, faça login no painel (http://pagamentocerto.com.br/painel),
+adicione seus dados bancários, etc. No final você receberá a chave por e-mail, um
+string com este formato: "XXXXXXXX-AAAA-BBBB-CCCC-ZZZZZZZZZZZZ". Guarde-a bem, você
+a usará em todas as transações bancárias
+
+=== Passo 2: Aplicação 
+
+Você tem um website feito em Ruby on Rails. Nele você tem seus produtos, seu carrinho
+de compras. No final de todo o processo, quando o cliente confirma o pagamento, você
+fará esta chamada:
+
+	lw = LwPagtoCerto.new(:chave_vendedor => "XXXXXXXX-AAAA-BBBB-CCCC-ZZZZZZZZZZZZ",
+		:url_retorno => "http://meusite.dominio.com.br/confirmacao_pagamento")
+
+A :url_retorno tem que ser uma URL válida, acessível pela internet. O processo funciona 
+assim: 
+
+  * você inicia a transação e recebe um ID de transacao
+
+  * sua aplicação devolve um HTTP POST ao endereço em LwPagtoCerto.DefaultCheckoutUrl
+    com o campo "tdi" igual ao ID da transacao. isso redirecionará o seu cliente ao
+    site do pagamento certo, com todos os dados do pedido e já pronto para pagar
+
+  * depois que o seu cliente efetua o pagamento corretamente, o Pagamento Certo fará
+    um HTTP POST de volta à sua aplicação, na URL que você passou no :url_retorno,
+    devolvendo novamente o ID da transação no "params[:tdi]" (crie um controller Rails
+    e cheque isso na action "create", por exemplo). Por exemplo, se você tiver um  
+    recurso assim:
+
+    # config/routes.rb
+    map.resource :checkout
+
+    # app/controllers/checkout_controller
+    class CheckoutController < ApplicationController
+      def create
+        id_transacao = params[:tdi]
+        lw = LwPagtoCerto.new(:chave_vendedor => "XXXXXXXX-AAAA-BBBB-CCCC-ZZZZZZZZZZZZ")
+				retorno = lw.consulta(id_transacao)
+				if retorno[:cod_retorno] == "15"
+					flash[:success] = "Pagamento bem sucedido"
+				else
+					flash[:error] = retorno[:mensagem_retorno]
+				end
+			end
+		end
+		
+		Nesse caso a :url_retorno seria "http://meusite.com/checkout"
+		
+	* como já adiantado no código acima, note a chamada à API de consulta da transação onde
+	  você poderá ver se deu tudo certo ou não.
+
+Uma vez criado a instância de LwPagtoCerto, preencha os dados do cliente corretamente
+conforme o exemplo abaixo:
+
+	lw.comprador = {
+	  :Nome        => "Fabio Akita",
+	  :Email       => "fabio.akita@locaweb.com.br",
+	  :Cpf         => "26675175807",
+	  :Rg          => "123456780",
+	  :Ddd         => "11",
+	  :Telefone    => "12345678",
+	  :TipoPessoa  => "Fisica",
+	  # :RazaoSocial => "",
+	  # :Cnpj        => "",
+	}
+	lw.pagamento = {
+	  :Modulo => "Boleto",
+	  # :Tipo => "",
+	}
+	lw.pedido = {
+	  :Numero => "12345",
+	  :ValorSubTotal  => "2000",
+	  :ValorFrete     => "000",
+	  :ValorAcrescimo => "000",
+	  :ValorDesconto  => "000",
+	  :ValorTotal     => "2000",
+	  :Itens => { 
+	    :Item => {
+	      :CodProduto    => "4321",
+	      :DescProduto   => "Livro",
+	      :Quantidade    => "1",
+	      :ValorUnitario => "2000",
+	      :ValorTotal    => "2000",
+	    },
+	  },
+	  :Cobranca => {
+	    :Endereco => "Rua Foo",
+	    :Numero   => "123",
+	    :Bairro   => "Foo",
+	    :Cidade   => "Sao Paulo",
+	    :Cep      => "12345678",
+	    :Estado   => "SP",
+	  },
+	  :Entrega => {
+	    :Endereco => "Rua Foo",
+	    :Numero   => "123",
+	    :Bairro   => "Foo",
+	    :Cidade   => "Sao Paulo",
+	    :Cep      => "12345678",
+	    :Estado   => "SP",
+	  },
+	}
+
+Com o objeto LwPagtoCerto preenchido corretamente você deve chamar o método "inicia", que
+começará uma transação aberta com o Pagamento Certo, lhe devolvendo o ID da transação. É 
+depois deste ponto que se faz o HTTP POST ao Pagamento Certo passando essa ID no campo 
+"tdi" do Post.
+
+	retorno = lw.inicia()
+	# => {:mensagem_retorno=>"Transa\303\247\303\243o iniciada.", 
+	      :id_transacao=>"YYYYYYYY-DDDD-EEEE-FFFF-ZZZZZZZZZZZZ", 
+	      :codigo=>"45383", :cod_retorno=>"0"}
+	
+Além disso, o objeto "retorno" ainda tem um método extra "cod_retorno_mensagem" para 
+traduzir o código no campo :cod_retorno.
+
+Como explicado, depois que o cliente faz o pagamento, o Pagamento Certo te redireciona
+à :url_retorno que você passou, repassando o ID da transação e então você pode verificar
+o resultado assim:
+
+	retorno = lw.consulta("YYYYYYYY-DDDD-EEEE-FFFF-ZZZZZZZZZZZZ")
+	# => {:mensagem_retorno=>"Transa\303\247\303\243o ainda n\303\243o processada.",
+	      :id_transacao=>"YYYYYYYY-DDDD-EEEE-FFFF-ZZZZZZZZZZZZ", :cod_retorno=>"12"}
+
+Aqui também, o objeto "retorno" ainda tem um método extra "cod_retorno_mensagem" para 
+traduzir o código no campo :cod_retorno. Procure por mais constantes no arquivo 
+"lib/lw-pagto-certo/version.rb"
+
+== REFERENCES
+
+Para entender o fluxo em detalhes bem como cada um dos dados retornados, vá ao site:
+
+  http://pagamentocerto.com.br/downloads/
+
+E baixe o kit de integração, que contém uma documentação detalhada em PDF.

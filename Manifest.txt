@@ -1,0 +1,10 @@
+History.txt
+lib/lw-pagto-certo
+lib/lw-pagto-certo/default.rb
+lib/lw-pagto-certo/defaultDriver.rb
+lib/lw-pagto-certo/defaultMappingRegistry.rb
+lib/lw-pagto-certo/pagto-20090326.wsdl
+lib/lw-pagto-certo/version.rb
+lib/lw-pagto-certo.rb
+Manifest.txt
+README.rdoc
