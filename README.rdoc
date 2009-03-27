@@ -9,9 +9,9 @@ envelopes corretos de dados.
 
 == REQUIREMENTS:
 
-ActiveSupport
-SOAP4R
-Builder
+* ActiveSupport
+* SOAP4R
+* Builder
 
 == INSTALL:
 
@@ -43,17 +43,17 @@ fará esta chamada:
 A :url_retorno tem que ser uma URL válida, acessível pela internet. O processo funciona 
 assim: 
 
-  * você inicia a transação e recebe um ID de transacao
+* você inicia a transação e recebe um ID de transacao
 
-  * sua aplicação devolve um HTTP POST ao endereço em LwPagtoCerto.DefaultCheckoutUrl
-    com o campo "tdi" igual ao ID da transacao. isso redirecionará o seu cliente ao
-    site do pagamento certo, com todos os dados do pedido e já pronto para pagar
+* sua aplicação devolve um HTTP POST ao endereço em LwPagtoCerto.DefaultCheckoutUrl
+  com o campo "tdi" igual ao ID da transacao. isso redirecionará o seu cliente ao
+  site do pagamento certo, com todos os dados do pedido e já pronto para pagar
 
-  * depois que o seu cliente efetua o pagamento corretamente, o Pagamento Certo fará
-    um HTTP POST de volta à sua aplicação, na URL que você passou no :url_retorno,
-    devolvendo novamente o ID da transação no "params[:tdi]" (crie um controller Rails
-    e cheque isso na action "create", por exemplo). Por exemplo, se você tiver um  
-    recurso assim:
+* depois que o seu cliente efetua o pagamento corretamente, o Pagamento Certo fará
+  um HTTP POST de volta à sua aplicação, na URL que você passou no :url_retorno,
+  devolvendo novamente o ID da transação no "params[:tdi]" (crie um controller Rails
+  e cheque isso na action "create", por exemplo). Por exemplo, se você tiver um  
+  recurso assim:
 
     # config/routes.rb
     map.resource :checkout
@@ -74,8 +74,8 @@ assim:
 		
 		Nesse caso a :url_retorno seria "http://meusite.com/checkout"
 		
-	* como já adiantado no código acima, note a chamada à API de consulta da transação onde
-	  você poderá ver se deu tudo certo ou não.
+* como já adiantado no código acima, note a chamada à API de consulta da transação onde
+  você poderá ver se deu tudo certo ou não.
 
 Uma vez criado a instância de LwPagtoCerto, preencha os dados do cliente corretamente
 conforme o exemplo abaixo:
