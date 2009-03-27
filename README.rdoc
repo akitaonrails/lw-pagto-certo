@@ -15,7 +15,7 @@ envelopes corretos de dados.
 
 == INSTALL:
 
-  gem install akitaonrails-lw-pagto-certo
+  gem install akitaonrails-lw-pagto-certo --source=http://gems.github.com
 
 == USANDO O PAGAMENTO CERTO DA LOCAWEB
 
