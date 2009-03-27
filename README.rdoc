@@ -83,7 +83,7 @@ conforme o exemplo abaixo:
   lw.comprador = {
     :Nome        => "Fabio Akita",
     :Email       => "fabio.akita@locaweb.com.br",
-    :Cpf         => "26675175807",
+    :Cpf         => "12312312300",
     :Rg          => "123456780",
     :Ddd         => "11",
     :Telefone    => "12345678",
