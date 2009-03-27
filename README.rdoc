@@ -72,7 +72,7 @@ assim:
       end
     end
     
-Nesse caso a :url_retorno seria "http://meusite.com/checkout"
+Nesse caso a :url_retorno seria <pre>"http://meusite.com/checkout"</pre>
     
 * como já adiantado no código acima, note a chamada à API de consulta da transação onde
   você poderá ver se deu tudo certo ou não.

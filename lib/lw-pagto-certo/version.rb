@@ -1,12 +1,16 @@
 class LwPagtoCerto
   VERSION = '0.0.1'
-  
+    
   MODULO_CARTAO = "CartaoCredito"
   MODULO_BOLETO = "Boleto"
   TIPO_VISA = "Visa"
   TIPO_AMEX = "AmericanExpress"
   TIPO_PESSOA_FISICA = "Fisica"
   TIPO_PESSOA_JURIDICA = "Juridica"
+  
+  MODULO = [MODULO_CARTAO, MODULO_BOLETO]
+  TIPO = [TIPO_VISA, TIPO_AMEX]
+  TIPO_PESSOA = [TIPO_PESSOA_FISICA, TIPO_PESSOA_JURIDICA]
   
   INICIA_COD_RETORNO = {
     :"0" => "Transação iniciada.",
