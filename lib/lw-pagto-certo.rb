@@ -104,14 +104,14 @@ class LwPagtoCerto
     payload = IniciaTransacao.new( self.chave_vendedor, self.url_retorno, transacao )
     response = LwPagtoCerto.soap.iniciaTransacao(payload)
     response = Hash.from_xml(response.iniciaTransacaoResult)
-    response = response["loca_web"]["transacao"].symbolize_keys
+    response = response["LocaWeb"]["Transacao"].symbolize_keys
     
     response[:data] = Time.parse(response[:data].gsub(/(\d+)\/(\d+)\/(\d+)\s(.*)/, 
       "#{$3}-#{$2}-#{$1}T#{$4}")) if response[:data] 
-    if response[:cod_retorno]
+    if response[:CodRetorno]
       response.instance_eval do 
         def cod_retorno_mensagem
-          LwPagtoCerto::INICIA_COD_RETORNO[self[:cod_retorno].to_sym]
+          LwPagtoCerto::INICIA_COD_RETORNO[self[:CodRetorno].to_sym]
         end
       end
     end
@@ -123,20 +123,20 @@ class LwPagtoCerto
   # lw = LwPagtoCerto.new(:chave_vendedor => "xxxxx", :url_retorno => "http://dominio.com/pagto")
   # retorno = lw.consulta("xxxxxxxx") # passa Id da transação retornada ao chamar "inicia"
   #
-  # puts retorno[:cod_retorno]
-  # puts retorno[:id_transacao]
-  # puts retorno[:codigo]
+  # puts retorno[:CodRetorno]
+  # puts retorno[:IdTransacao]
+  # puts retorno[:Codigo]
   # puts retorno[:data]  # => "26/3/2009 15:19:41"
-  # puts retorno[:mensagem_retorno]
+  # puts retorno[:MensagemRetorno]
   def consulta(id_transacao = "")
     payload = ConsultaTransacao.new self.chave_vendedor, id_transacao
     response = LwPagtoCerto.soap.consultaTransacao(payload)
     response = Hash.from_xml(response.consultaTransacaoResult)
     response = response["loca_web"]["transacao"].symbolize_keys
-    if response[:cod_retorno]
+    if response[:CodRetorno]
       response.instance_eval do 
         def cod_retorno_mensagem
-          LwPagtoCerto::FINALIZA_COD_RETORNO[self[:cod_retorno].to_sym]
+          LwPagtoCerto::FINALIZA_COD_RETORNO[self[:CodRetorno].to_sym]
         end
       end
     end
