@@ -1,3 +1,7 @@
+== 0.0.3 2009-04-24
+
+* Fixing dependencies (fails in Rails with ~> for activesupport)
+
 == 0.0.2 2009-03-26
 
 * Adding initial RSpec support
