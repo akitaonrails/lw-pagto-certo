@@ -132,7 +132,7 @@ class LwPagtoCerto
     payload = ConsultaTransacao.new self.chave_vendedor, id_transacao
     response = LwPagtoCerto.soap.consultaTransacao(payload)
     response = Hash.from_xml(response.consultaTransacaoResult)
-    response = response["loca_web"]["transacao"].symbolize_keys
+    response = response["LocaWeb"]["Transacao"].symbolize_keys
     if response[:CodRetorno]
       response.instance_eval do 
         def cod_retorno_mensagem
@@ -141,6 +141,14 @@ class LwPagtoCerto
       end
     end
     response
+  end
+  
+  def consultaPedido(id_transacao = "")
+    payload = ConsultaTransacao.new self.chave_vendedor, id_transacao
+    response = LwPagtoCerto.soap.consultaTransacao(payload)
+    response = Hash.from_xml(response.consultaTransacaoResult)
+    return response["LocaWeb"]["Pedido"].symbolize_keys if response["LocaWeb"]["Pedido"]
+    return []
   end
 
   # Usado internamento pelo Inicia Transacao para gerar o XML
