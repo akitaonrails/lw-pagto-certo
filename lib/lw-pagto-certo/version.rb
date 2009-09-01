@@ -1,5 +1,5 @@
 class LwPagtoCerto
-  VERSION = '0.0.3'
+  VERSION = '0.0.4'
     
   MODULO_CARTAO = "CartaoCredito"
   MODULO_BOLETO = "Boleto"
