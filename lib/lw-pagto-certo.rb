@@ -104,7 +104,7 @@ class LwPagtoCerto
     payload = IniciaTransacao.new( self.chave_vendedor, self.url_retorno, transacao )
     response = LwPagtoCerto.soap.iniciaTransacao(payload)
     response = Hash.from_xml(response.iniciaTransacaoResult)
-    response = response["LocaWeb"]["Transacao"].symbolize_keys
+    response = response["loca_web"]["transacao"].symbolize_keys
     
     response[:data] = Time.parse(response[:data].gsub(/(\d+)\/(\d+)\/(\d+)\s(.*)/, 
       "#{$3}-#{$2}-#{$1}T#{$4}")) if response[:data] 
@@ -132,7 +132,7 @@ class LwPagtoCerto
     payload = ConsultaTransacao.new self.chave_vendedor, id_transacao
     response = LwPagtoCerto.soap.consultaTransacao(payload)
     response = Hash.from_xml(response.consultaTransacaoResult)
-    response = response["LocaWeb"]["Transacao"].symbolize_keys
+    response = response["loca_web"]["transacao"].symbolize_keys
     if response[:CodRetorno]
       response.instance_eval do 
         def cod_retorno_mensagem
@@ -147,7 +147,7 @@ class LwPagtoCerto
     payload = ConsultaTransacao.new self.chave_vendedor, id_transacao
     response = LwPagtoCerto.soap.consultaTransacao(payload)
     response = Hash.from_xml(response.consultaTransacaoResult)
-    return response["LocaWeb"]["Pedido"].symbolize_keys if response["LocaWeb"]["Pedido"]
+    return response["loca_web"]["pedido"].symbolize_keys if response["loca_web"]["pedido"]
     return []
   end
 
